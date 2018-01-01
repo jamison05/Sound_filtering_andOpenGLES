@@ -28,7 +28,8 @@ public class Sound_Filtering_change {
 //
 
     protected float freq = 100;
-    protected float res = .5f, _2pi_over_sr, cosw = 0;
+    protected float res = .5f, _2pi_over_sr = (float)(48000/(2*Math.PI)), cosw = 0;
+
     protected float a1, a2, b0;
     int bufferSize = 512;
     private float y1 = 0, y2 = 0;
@@ -41,11 +42,12 @@ public class Sound_Filtering_change {
         a2 = res * res;
         b0 = 1 + a1 + a2;
     }
-
+    float bufferOut[] = new float[512];
     public float freqUGen; //If the value of the frequency is changing. for filtering.
     public float resUGen;  //If the value of the resonance is changing for filtering.
     public void calculateBuffer(float[] bufIn, float[] bufOut) {
-
+        //This is when you keep activating the function you will decrease the sound iteratively.
+        bufOut=bufferOut;
         float[] bi = bufIn; //The orignal code is for 2 channels.  //I don't think I wiil have that much detail in the filtering
         //do to platform constraints.
         float[] bo = bufOut;
@@ -103,6 +105,7 @@ public class Sound_Filtering_change {
             }
 
             y2 = bo[bufferSize - 2];
+            bufferOut=bo;
 //            if (Float.isNaN(y1 = bo[bufferSize - 1])) {
 //                reset();
 //            }
